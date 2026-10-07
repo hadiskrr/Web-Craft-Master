@@ -148,4 +148,4 @@ prefers-reduced-motion.
 
 ## Licence
 
-MIT — voir le fichier `LICENSE`.
+MIT - voir le fichier `LICENSE`.
