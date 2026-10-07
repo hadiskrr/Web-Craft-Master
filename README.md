@@ -1,49 +1,27 @@
-# web-craft-master
+# Web Craft Master
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-2.0.0-informational.svg)
-![CI](https://img.shields.io/github/actions/workflow/status/hadi-prv/web-craft-master/validate-skill.yml?branch=main&label=validate-skill)
-![Skill package](https://img.shields.io/badge/package-skill-4b5563.svg)
+Skill complète pour concevoir, auditer, refondre et améliorer des sites web et des interfaces produit.
 
-Skill maitre pour concevoir, auditer, refondre, animer et rediger des sites web
-et des interfaces produit. Le package regroupe cinq expertises dans un meme
-workflow : UI/UX, architecture Tailwind CSS, audit & refonte, redaction
-naturelle et motion design inspire des interfaces Apple.
+## Objectif
 
-## Ce que le package couvre
+Web Craft Master rassemble une méthode de travail unique dans `SKILL.md`. Le package est autonome : les règles, les guides, les exemples et les checklists sont regroupés dans un seul fichier.
 
-| Expertise | Ce qu'elle apporte |
+## Couverture
+
+| Domaine | Contenu |
 |---|---|
-| **UI/UX** | Ergonomie, design systems, accessibilite WCAG 2.2, hierarchie visuelle |
-| **Tailwind CSS** | Architecture utilitaire moderne (v3/v4), mobile-first, dark mode natif |
-| **Audit & Refonte** | Cartographie, friction utilisateur, notation et plan d'action priorise |
-| **Redaction naturelle** | Phrases directes, faits concrets, suppression des formulations convenues |
-| **Motion design** | Springs interruptibles, suivi 1:1, momentum, rubber-banding et mouvement reduit |
+| UI/UX | Hiérarchie visuelle, ergonomie, composants et design systems |
+| Tailwind CSS | Architecture utilitaire, responsive, dark mode et états interactifs |
+| Audit & refonte | Cartographie, notation, friction, priorisation et vérification finale |
+| Rédaction | Texte direct, concret et cohérent avec le contexte du projet |
+| Motion | Springs, suivi direct, interruption, momentum, rubber-banding et réduction du mouvement |
+| Qualité web | Sécurité, SEO, performance, responsive et accessibilité |
 
-## Principes de travail
+## Ordre de priorité
 
-Le package applique une priorite stricte :
+**Fonctionnalité → sécurité → clarté → accessibilité → performance → SEO → design → motion**
 
-**fonctionnalite -> securite -> clarte -> accessibilite -> performance -> SEO -> design -> motion**
-
-Quelques regles structurantes :
-
-- ne jamais inventer de contenu, de chiffres, de temoignages ou d'informations
-  commerciales ;
-- cartographier l'existant avant de modifier une architecture fonctionnelle ;
-- conserver les fonctionnalites utiles au lieu de refaire le projet par principe ;
-- utiliser un seul CTA principal par page ;
-- privilegier la typographie, l'espace, le contraste et la composition ;
-- reserver les animations aux changements d'etat, au feedback et aux interactions
-  manipulables ;
-- traiter les gestes avec des animations interruptibles et compatibles avec
-  `prefers-reduced-motion`.
-
-Les details et contre-exemples se trouvent dans
-[`references/banned-patterns.md`](references/banned-patterns.md) et
-[`references/apple-motion-guide.md`](references/apple-motion-guide.md).
-
-## Structure du depot
+## Structure
 
 ```text
 web-craft-master/
@@ -58,64 +36,71 @@ web-craft-master/
 ├── LICENSE
 ├── README.md
 ├── SKILL.md
-├── references/
-│   ├── apple-motion-guide.md
-│   ├── audit-framework.md
-│   └── banned-patterns.md
 └── scripts/
     └── validate_skill.py
 ```
 
-## Installation
+## Installation locale
 
-### Claude Code
-
-Depuis une copie locale :
+Depuis le dossier parent du package :
 
 ```bash
 claude plugin install ./web-craft-master
 ```
 
-Depuis un depot distant :
+## Publication sur GitHub
+
+### 1. Créer le dépôt
+
+Sur GitHub, crée un dépôt vide nommé `web-craft-master`. Ne coche pas l'option qui ajoute automatiquement un README, une licence ou un `.gitignore` : ces fichiers sont déjà présents dans le package.
+
+### 2. Ouvrir un terminal dans le package
 
 ```bash
-claude plugin install github:hadi-prv/web-craft-master
+cd web-craft-master
 ```
 
-Le manifeste du package se trouve dans
-`.claude-plugin/plugin.json`. La version actuelle declaree est `2.0.0`.
+### 3. Initialiser Git et envoyer la première version
 
-## Validation locale
+```bash
+git init
+git add .
+git commit -m "Initial release"
+git branch -M main
+git remote add origin https://github.com/hadi-prv/web-craft-master.git
+git push -u origin main
+```
 
-Le package fournit un validateur sans dependance externe :
+### 4. Vérifier le dépôt
+
+Sur GitHub, tu dois retrouver `SKILL.md`, `README.md`, `LICENSE`, `.claude-plugin/plugin.json`, `scripts/validate_skill.py` et le workflow GitHub.
+
+### 5. Mettre à jour le package
+
+Après une modification :
+
+```bash
+git add .
+git commit -m "Update skill"
+git push
+```
+
+## Validation
+
+Avant chaque publication, lance :
 
 ```bash
 python3 scripts/validate_skill.py .
 ```
 
-Il verifie notamment :
+La validation contrôle la structure du package, les fichiers obligatoires, le manifeste, les fichiers JSON, les chemins déclarés et les liens Markdown locaux.
 
-- les titres Markdown et les formulations bannies ;
-- les marqueurs de contenu incomplet ;
-- la validite des fichiers JSON ;
-- la presence des fichiers essentiels du package ;
-- les liens Markdown locaux ;
-- la coherence des fichiers declares par le manifeste.
-
-La meme verification est executee automatiquement par
-`.github/workflows/validate-skill.yml`.
-
-## Contribuer
-
-Avant d'envoyer une modification :
-
-1. conserver les conventions de structure et de nommage existantes ;
-2. executer `python3 scripts/validate_skill.py .` ;
-3. verifier que les fichiers references existent et que la documentation reste
-   exacte.
-
-Aucune dependance externe n'est requise pour la validation locale.
+Le workflow `.github/workflows/validate-skill.yml` exécute également cette validation sur les pushes et les pull requests.
 
 ## Licence
 
-Ce projet est distribue sous licence MIT. Voir [`LICENSE`](LICENSE).
+MIT. Voir `LICENSE`.
+
+## Maintenance
+
+Toute évolution importante doit mettre à jour `SKILL.md`, conserver la structure du package et passer la validation locale.
