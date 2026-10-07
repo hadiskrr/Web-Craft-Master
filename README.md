@@ -1,66 +1,90 @@
-# Web Craft Master
+# web-craft-master
 
-Skill complète pour concevoir, auditer, refondre et améliorer des sites web et des interfaces produit.
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-2.0.0-informational.svg)
+![CI](https://img.shields.io/github/actions/workflow/status/hadi-prv/web-craft-master/validate-skill.yml?branch=main&label=validate-skill)
+![Claude Skill](https://img.shields.io/badge/claude-skill-6A5ACD.svg)
 
-## Objectif
+Skill maître qui rassemble dans un seul moteur de décision tout ce qu'il faut
+pour concevoir, auditer, refondre, animer et rédiger des sites web et des
+interfaces produit réellement prêts pour la production — pas des maquettes
+qui donnent l'illusion d'être finies.
 
-Web Craft Master rassemble une méthode de travail unique dans `SKILL.md`. Le package est autonome : les règles, les guides, les exemples et les checklists sont regroupés dans un seul fichier.
+## Les cinq expertises fusionnées
 
-## Couverture
-
-| Domaine | Contenu |
+| Expertise | Ce qu'elle apporte |
 |---|---|
-| UI/UX | Hiérarchie visuelle, ergonomie, composants et design systems |
-| Tailwind CSS | Architecture utilitaire, responsive, dark mode et états interactifs |
-| Audit & refonte | Cartographie, notation, friction, priorisation et vérification finale |
-| Rédaction | Texte direct, concret et cohérent avec le contexte du projet |
-| Motion | Springs, suivi direct, interruption, momentum, rubber-banding et réduction du mouvement |
-| Qualité web | Sécurité, SEO, performance, responsive et accessibilité |
+| **UI/UX** | Ergonomie avancée, design systems, accessibilité WCAG 2.2 AA/AAA, hiérarchie visuelle, psychologie utilisateur |
+| **Tailwind CSS** | Architecture utilitaire moderne (v3/v4), layout mobile-first, dark mode natif, optimisation CSS |
+| **Audit & Refonte** | Méthodologie d'audit heuristique, cartographie des frictions, grille de notation, plan d'action |
+| **Rédaction** | Élimination des tics de langage artificiels, tonalité directe, naturelle et cohérente avec le projet |
+| **Motion & Interfaces Fluides** | Springs interruptibles, suivi 1:1, momentum, rubber-banding, matériaux translucides, typographie optique |
 
-## Ordre de priorité
+## Pourquoi ce skill existe
 
-**Fonctionnalité → sécurité → clarté → accessibilité → performance → SEO → design → motion**
+La plupart des interfaces finissent par se ressembler : mêmes palettes,
+mêmes cartes, mêmes effets, mêmes espacements et mêmes textes génériques.
+`web-craft-master` impose une méthode stricte avant toute modification, afin
+de produire des interfaces distinctives, cohérentes, accessibles et
+réellement fonctionnelles.
 
-## Structure
+## Pratiques bannies vs standard recommandé
 
-```text
+| Catégorie | Banni | Standard imposé |
+|---|---|---|
+| Typographie | Inter, Geist, Space Grotesk | Plus Jakarta Sans / Outfit / Satoshi (SaaS), Cabinet Grotesk / General Sans (editorial), JetBrains Mono / Fira Code (code) |
+| Titres & boutons | Emoji en titre ou CTA | SVG inline (`viewBox="0 0 24 24"`, `stroke="currentColor"`, 1.5px) |
+| Animations | Flèches animées, hover flottant, particules, transitions CSS bloquantes sur geste | Springs interruptibles, suivi 1:1, handoff de vitesse, momentum, rubber-banding |
+| Effets & fonds | Ombres lourdes, glassmorphism surchargé, dot grid, orbes flous, effets décoratifs | Hiérarchie par typographie, espace, contraste, bordures fines et matériaux translucides maîtrisés |
+| Rédaction | Antithèses creuses, formules toutes faites, grandiloquence sans preuve | Phrases actives, faits concrets, verbes directs, texte adapté au contexte |
+| Limites de scroll/drag | Arrêt brutal | Rubber-banding : résistance progressive et reprise fluide |
+
+Les règles détaillées, exemples et checklists sont regroupés directement dans
+[`SKILL.md`](SKILL.md) afin que le package reste autonome et simple à importer.
+
+## Structure du dépôt
+
+```
 web-craft-master/
 ├── .claude-plugin/
-│   └── plugin.json
+│   └── plugin.json              # Manifeste du plugin
 ├── .github/
 │   └── workflows/
-│       └── validate-skill.yml
-├── .editorconfig
-├── .gitattributes
-├── .gitignore
-├── LICENSE
-├── README.md
-├── SKILL.md
+│       └── validate-skill.yml   # Validation automatique à chaque push/PR
+├── SKILL.md                     # Coeur du skill : règles, workflow, exemples
+├── README.md                    # Ce fichier
+├── LICENSE                      # Licence MIT
+├── .editorconfig                # Règles d'édition communes
+├── .gitattributes               # Normalisation Git des fichiers
+├── .gitignore                   # Fichiers locaux exclus du dépôt
 └── scripts/
-    └── validate_skill.py
+    └── validate_skill.py        # Linter local
 ```
 
-## Installation locale
+## Installation
 
-Depuis le dossier parent du package :
+### Claude Code (CLI)
 
 ```bash
 claude plugin install ./web-craft-master
 ```
 
-## Publication sur GitHub
-
-### 1. Créer le dépôt
-
-Sur GitHub, crée un dépôt vide nommé `web-craft-master`. Ne coche pas l'option qui ajoute automatiquement un README, une licence ou un `.gitignore` : ces fichiers sont déjà présents dans le package.
-
-### 2. Ouvrir un terminal dans le package
+Ou directement depuis GitHub une fois le dépôt publié :
 
 ```bash
-cd web-craft-master
+claude plugin install github:hadi-prv/web-craft-master
 ```
 
-### 3. Initialiser Git et envoyer la première version
+### Claude Desktop
+
+1. Télécharger ou cloner ce dépôt.
+2. Ouvrir Claude Desktop → Paramètres → Skills → **Importer un skill**.
+3. Sélectionner le dossier `web-craft-master` ou le package `.skill` lorsque
+   disponible.
+
+### GitHub
+
+Pour publier le projet :
 
 ```bash
 git init
@@ -71,13 +95,7 @@ git remote add origin https://github.com/hadi-prv/web-craft-master.git
 git push -u origin main
 ```
 
-### 4. Vérifier le dépôt
-
-Sur GitHub, tu dois retrouver `SKILL.md`, `README.md`, `LICENSE`, `.claude-plugin/plugin.json`, `scripts/validate_skill.py` et le workflow GitHub.
-
-### 5. Mettre à jour le package
-
-Après une modification :
+Pour les mises à jour :
 
 ```bash
 git add .
@@ -85,22 +103,49 @@ git commit -m "Update skill"
 git push
 ```
 
-## Validation
+## Validation locale
 
-Avant chaque publication, lance :
+Avant toute publication, exécuter le linter :
 
 ```bash
 python3 scripts/validate_skill.py .
 ```
 
-La validation contrôle la structure du package, les fichiers obligatoires, le manifeste, les fichiers JSON, les chemins déclarés et les liens Markdown locaux.
+Il vérifie :
+- la structure du package et les fichiers obligatoires ;
+- la validité de `.claude-plugin/plugin.json` et des fichiers JSON ;
+- les chemins déclarés et les liens Markdown locaux ;
+- l'absence de contenu incomplet ou de marqueurs non finalisés.
 
-Le workflow `.github/workflows/validate-skill.yml` exécute également cette validation sur les pushes et les pull requests.
+Le workflow `.github/workflows/validate-skill.yml` exécute la même
+vérification automatiquement à chaque push et pull request.
+
+## Exemples de prompts
+
+```
+Audite ce site et donne-moi un rapport complet avant de toucher au code.
+```
+
+```
+Refonds cette landing page : elle a l'air générique, enlève tout ce qui
+fait template et garde un seul CTA.
+```
+
+```
+Écris le texte de cette section À propos avec une tonalité directe,
+naturelle et adaptée au projet.
+```
+
+```
+Implémente ce design en Tailwind CSS, mobile-first, avec dark mode natif.
+```
+
+```
+Ajoute une bottom sheet qui se glisse au doigt, avec un comportement fluide,
+interruptible, du rubber-banding aux bords et un respect de
+prefers-reduced-motion.
+```
 
 ## Licence
 
-MIT. Voir `LICENSE`.
-
-## Maintenance
-
-Toute évolution importante doit mettre à jour `SKILL.md`, conserver la structure du package et passer la validation locale.
+MIT — voir le fichier `LICENSE`.
