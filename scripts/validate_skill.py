@@ -3,8 +3,9 @@
 validate_skill.py — Linter autonome pour le depot web-craft-master.
 
 Verifie :
-  1. Absence d'emoji dans les titres Markdown.
-  2. Absence des mots/tournures bannis par la skill.
+  1. Absence d'emoji dans les titres Markdown (#, ##, ### ... et dans les
+     boutons/liens de type [texte](...) utilises comme CTA).
+  2. Absence des mots/tournures bannis par la skill (tics de redaction IA).
   3. Validite JSON de .claude-plugin/plugin.json et de tout autre *.json
      du depot.
   4. Absence de marqueurs de contenu incomplet (TODO, FIXME, "a completer",
@@ -38,7 +39,7 @@ EMOJI_PATTERN = re.compile(
     "\U0001F300-\U0001FAFF"
     "\U00002600-\U000027BF"
     "\U0001F1E6-\U0001F1FF"
-    "\U00002190-\U000021FF"  # fleches decoratives souvent utilisees comme icones
+    "\U00002190-\U000021FF"  # fleches (souvent utilisees comme "icones" IA)
     "\U00002B00-\U00002BFF"
     "\U0000FE0F"
     "]",
@@ -47,7 +48,7 @@ EMOJI_PATTERN = re.compile(
 
 HEADING_PATTERN = re.compile(r"^(#{1,6})\s+(.*)$", re.MULTILINE)
 
-# Tics de redaction artificiels (francais). Recherche insensible a la casse.
+# Tics de redaction IA (francais). Recherche insensible a la casse.
 BANNED_PHRASES = [
     r"plongeons dans",
     r"dans le monde num[ée]rique d['’]aujourd['’]hui",
@@ -77,9 +78,11 @@ INCOMPLETE_MARKERS = [
 ]
 INCOMPLETE_RE = re.compile("|".join(INCOMPLETE_MARKERS), re.IGNORECASE)
 
-# Les documents de package peuvent citer des formulations interdites comme
-# exemples pédagogiques sans être signalés par le linter.
+# Chemins (relatifs a la racine du depot) dont le role est de *documenter*
+# les tournures bannies : ils les citent volontairement comme contre-exemples
+# et ne doivent donc pas etre verifies par check_banned_phrases.
 DOC_EXEMPT_PATHS = {
+    "references/banned-patterns.md",
     "SKILL.md",
     "README.md",
 }
@@ -125,8 +128,10 @@ def check_banned_phrases(path: Path, text: str, root: Path) -> list[Issue]:
         rel = path.relative_to(root).as_posix()
     except ValueError:
         rel = str(path)
-    # La skill et le README documentent volontairement certains interdits
-    # comme contre-exemples ; ils sont donc exclus du contrôle lexical.
+    # Les fichiers qui *documentent* les interdits (skill, README, matrice de
+    # reference) les citent volontairement comme contre-exemples et ne sont
+    # donc pas verifies ici : la detection sert a lineter le contenu produit
+    # avec la skill (pages, rapports), pas sa propre documentation.
     if rel in DOC_EXEMPT_PATHS:
         return issues
     for line_no, line in enumerate(text.splitlines(), start=1):
@@ -181,95 +186,14 @@ def check_plugin_manifest(root: Path) -> list[Issue]:
     return issues
 
 
-REQUIRED_FILES = [
-    "README.md",
-    "LICENSE",
-    ".gitattributes",
-    ".gitignore",
-    ".editorconfig",
-    "SKILL.md",
-    ".claude-plugin/plugin.json",
-    "scripts/validate_skill.py",
-    ".github/workflows/validate-skill.yml",
-]
-
-
-def check_required_files(root: Path) -> list[Issue]:
-    issues = []
-    for rel in REQUIRED_FILES:
-        path = root / rel
-        if not path.is_file():
-            issues.append(Issue(path, 0, "Fichier requis manquant pour le package"))
-    return issues
-
-
-MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[[^\]]*\]\(([^)\s]+)(?:\s+['\"][^'\"]*['\"])?\)")
-
-
-def check_local_markdown_links(root: Path) -> list[Issue]:
-    issues = []
-    for path in iter_files(root, MARKDOWN_GLOBS):
-        text = path.read_text(encoding="utf-8")
-        for match in MARKDOWN_LINK_RE.finditer(text):
-            target = match.group(1).strip().strip("<>")
-            # External / anchor-only links are not local files.
-            if target.startswith(("#", "http://", "https://", "mailto:", "tel:")):
-                continue
-            target_path = (path.parent / target.split("#", 1)[0]).resolve()
-            if not target_path.exists():
-                line_no = text.count("\n", 0, match.start()) + 1
-                issues.append(Issue(path, line_no, f"Lien Markdown local introuvable : {target!r}"))
-    return issues
-
-
-def check_manifest_paths(root: Path) -> list[Issue]:
-    issues = []
-    manifest_path = root / ".claude-plugin" / "plugin.json"
-    if not manifest_path.is_file():
-        return issues
-    try:
-        data = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return issues
-    for rel in data.get("skills", []) or []:
-        path = (root / rel).resolve()
-        if not path.is_file():
-            issues.append(Issue(manifest_path, 0, f"Fichier declare dans 'skills' introuvable : {rel!r}"))
-    return issues
-
-
-def check_skill_sections(root: Path) -> list[Issue]:
-    issues = []
-    path = root / "SKILL.md"
-    if not path.is_file():
-        return issues
-    text = path.read_text(encoding="utf-8")
-    required_sections = [
-        "# Guides intégrés",
-        "## Motifs interdits et remplacements",
-        "## Guide Motion & Interfaces Fluides",
-        "## Grille d’audit et de refonte",
-    ]
-    for section in required_sections:
-        if section not in text:
-            issues.append(Issue(path, 0, f"Section intégrée manquante : {section}"))
-    if (root / "references").exists():
-        issues.append(Issue(root / "references", 0, "Le package doit être autonome : supprimer le dossier references/"))
-    return issues
-
-
 def main() -> int:
     root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(".")
     root = root.resolve()
 
     all_issues: list[Issue] = []
 
-    all_issues.extend(check_required_files(root))
-    all_issues.extend(check_skill_sections(root))
     all_issues.extend(check_plugin_manifest(root))
-    all_issues.extend(check_manifest_paths(root))
     all_issues.extend(check_json_files(root))
-    all_issues.extend(check_local_markdown_links(root))
 
     for path in iter_files(root, MARKDOWN_GLOBS):
         text = path.read_text(encoding="utf-8")

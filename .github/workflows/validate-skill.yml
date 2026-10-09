@@ -1,0 +1,47 @@
+name: Validate Skill
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    name: Lint SKILL.md, references and plugin manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run validate_skill.py
+        run: python3 scripts/validate_skill.py .
+
+      - name: Check required files exist
+        run: |
+          set -e
+          for f in \
+            ".claude-plugin/plugin.json" \
+            "SKILL.md" \
+            "README.md" \
+            "LICENSE" \
+            ".gitattributes" \
+            ".gitignore" \
+            ".editorconfig" \
+            "references/banned-patterns.md" \
+            "references/apple-motion-guide.md" \
+            "references/audit-framework.md" \
+            "scripts/validate_skill.py"
+          do
+            if [ ! -f "$f" ]; then
+              echo "Fichier requis manquant : $f"
+              exit 1
+            fi
+          done
+          echo "Tous les fichiers requis sont presents."

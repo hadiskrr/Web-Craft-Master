@@ -1,0 +1,31 @@
+# Normalisation des fins de ligne : tout en LF dans le depot,
+# conversion automatique a la checkout selon l'OS local.
+* text=auto eol=lf
+
+# Types de texte explicites
+*.md     text diff=markdown
+*.json   text
+*.yml    text
+*.yaml   text
+*.py     text diff=python
+.gitattributes text
+.gitignore     text
+.editorconfig  text
+LICENSE  text
+
+# Le script Python est executable une fois extrait/clone
+scripts/*.py text eol=lf
+
+# Documentation : exclue des statistiques de langage du depot (GitHub Linguist)
+references/*.md linguist-documentation
+*.md linguist-documentation
+
+# Rien de binaire dans ce depot a ce jour ; regle de securite par defaut
+# si un binaire est ajoute plus tard sans extension listee ci-dessus
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.woff  binary
+*.woff2 binary

@@ -1,0 +1,37 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editeurs / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python (scripts/validate_skill.py)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Node (si un jour un outillage JS est ajoute au depot)
+node_modules/
+npm-debug.log*
+
+# Artefacts de build / packaging
+dist/
+build/
+*.skill
+*.zip
+
+# Logs
+*.log
